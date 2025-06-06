@@ -1,124 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>CAD System Login</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>Login – CAD System</title>
   <style>
     html, body {
-      margin: 0; padding: 0;
+      margin: 0;
+      padding: 0;
+      background-color: #0b0b0b;
+      font-family: 'Courier New', Courier, monospace;
+      color: #00ff00;
       height: 100%;
-      background-color: #0a0f1c;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       display: flex;
-      justify-content: center;
       align-items: center;
-      color: #00ffff;
+      justify-content: center;
     }
 
     .login-container {
-      background-color: #101c30;
-      border: 2px solid #00ffff;
-      box-shadow: 0 0 10px #00ffff88;
-      padding: 30px;
+      background: #111;
+      border: 2px solid #00ff00;
+      padding: 30px 40px;
       border-radius: 10px;
+      box-shadow: 0 0 12px #00ff00;
+      max-width: 350px;
       width: 90%;
-      max-width: 400px;
     }
 
     h2 {
       text-align: center;
-      margin-bottom: 30px;
-      font-size: 24px;
-      letter-spacing: 2px;
-      color: #00ffff;
+      margin-bottom: 20px;
+      font-size: 20px;
     }
 
     label {
+      font-size: 14px;
+      margin-bottom: 5px;
       display: block;
-      margin-top: 15px;
-      font-weight: bold;
     }
 
-    input {
+    input[type="text"],
+    input[type="password"] {
       width: 100%;
       padding: 10px;
-      background-color: #0a1b2f;
-      border: 1px solid #00ffff88;
-      color: #00ffff;
-      border-radius: 5px;
-      font-size: 14px;
-      margin-top: 5px;
-      outline: none;
-      transition: box-shadow 0.3s ease;
-    }
-
-    input:focus {
-      box-shadow: 0 0 8px #00ffffcc;
+      margin-bottom: 15px;
+      background: black;
+      border: 1px solid #00ff00;
+      color: #00ff00;
+      font-size: 16px; /* Prevents zoom-in */
+      border-radius: 4px;
+      box-sizing: border-box;
     }
 
     button {
-      margin-top: 25px;
       width: 100%;
-      padding: 12px;
-      background-color: #00ffff;
-      color: #0a0f1c;
-      border: none;
-      border-radius: 5px;
+      padding: 10px;
+      background: black;
+      border: 1px solid #00ff00;
+      color: #00ff00;
       font-size: 16px;
-      font-weight: bold;
       cursor: pointer;
-      transition: transform 0.1s ease-in-out;
+      border-radius: 4px;
     }
 
-    button:active {
-      transform: scale(0.97);
-    }
-
-    #error {
-      margin-top: 15px;
-      color: #ff4d4d;
+    .error {
+      color: red;
       font-size: 13px;
+      margin-top: 10px;
       text-align: center;
-      display: none;
+    }
+
+    @media (max-width: 480px) {
+      .login-container {
+        padding: 20px;
+      }
     }
   </style>
 </head>
 <body>
   <div class="login-container">
-    <h2>OFFICER LOGIN</h2>
+    <h2>CAD SYSTEM LOGIN</h2>
     <label for="username">Username</label>
-    <input type="text" id="username" autocomplete="username">
+    <input type="text" id="username" autocomplete="off" />
 
     <label for="password">Password</label>
-    <input type="password" id="password" autocomplete="current-password">
+    <input type="password" id="password" autocomplete="off" />
 
-    <button onclick="attemptLogin()">ENTER SYSTEM</button>
-    <div id="error">Invalid username or password</div>
+    <button onclick="login()">LOGIN</button>
+    <div class="error" id="errorMsg"></div>
   </div>
 
   <script>
-    let officerList = [];
+    async function login() {
+      const user = document.getElementById('username').value.trim();
+      const pass = document.getElementById('password').value.trim();
+      const err = document.getElementById('errorMsg');
+      err.textContent = '';
 
-    fetch('officers.json')
-      .then(res => res.json())
-      .then(data => { officerList = data; })
-      .catch(() => {
-        document.getElementById('error').textContent = "Error loading officers list.";
-        document.getElementById('error').style.display = "block";
-      });
+      try {
+        const response = await fetch('officers.json');
+        const data = await response.json();
 
-    function attemptLogin() {
-      const u = document.getElementById('username').value.trim().toLowerCase();
-      const p = document.getElementById('password').value;
-      const match = officerList.find(o => o.username.toLowerCase() === u && o.password === p);
-
-      if (match) {
-        localStorage.setItem('officerName', match.name);
-        window.location.href = 'dashboard.html';
-      } else {
-        document.getElementById('error').textContent = "Invalid username or password";
-        document.getElementById('error').style.display = "block";
+        const found = data.find(u => u.username === user && u.password === pass);
+        if (found) {
+          localStorage.setItem('officerName', found.name);
+          window.location.href = 'dashboard.html';
+        } else {
+          err.textContent = 'Invalid username or password.';
+        }
+      } catch (e) {
+        err.textContent = 'Error loading officer data.';
+        console.error(e);
       }
     }
   </script>
