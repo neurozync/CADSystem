@@ -16,12 +16,14 @@
       align-items: center;
       justify-content: center;
       height: 100vh;
+      position: relative;
     }
 
     h1 {
       margin-bottom: 20px;
       color: #00bfff;
       text-shadow: 1px 1px 3px #000;
+      text-align: center;
     }
 
     .button-container {
@@ -49,10 +51,10 @@
       background-color: #0f2a3b;
     }
 
-    #officerNameDisplay {
+    #officerInfo {
       position: absolute;
       top: 10px;
-      left: 10px;
+      left: 15px;
       font-size: 14px;
       color: #888;
     }
@@ -60,15 +62,16 @@
     #clock {
       position: absolute;
       top: 10px;
-      right: 10px;
+      right: 15px;
       font-size: 14px;
       color: #888;
+      text-align: right;
     }
 
     #logoutBtn {
       position: absolute;
-      bottom: 15px;
-      right: 15px;
+      bottom: 20px;
+      right: 20px;
       padding: 8px 14px;
       background-color: #1a1a1a;
       border: 1px solid red;
@@ -86,12 +89,17 @@
       h1 {
         font-size: 20px;
       }
+
+      #officerInfo,
+      #clock {
+        font-size: 12px;
+      }
     }
   </style>
 </head>
 <body>
-  <div id="officerNameDisplay">Logged in as: --</div>
-  <div id="clock">--:--:--</div>
+  <div id="officerInfo">Logged in as: --</div>
+  <div id="clock">--:--:--<br>--/--/----</div>
 
   <h1>OFFICER DASHBOARD</h1>
   <div class="button-container">
@@ -102,17 +110,21 @@
   <button id="logoutBtn" onclick="logout()">LOGOUT</button>
 
   <script>
+    // Update time and date
     function updateClock() {
       const now = new Date();
-      document.getElementById('clock').textContent = now.toLocaleTimeString();
+      const time = now.toLocaleTimeString();
+      const date = now.toLocaleDateString();
+      document.getElementById('clock').innerHTML = `${time}<br>${date}`;
     }
     setInterval(updateClock, 1000);
     updateClock();
 
-    // Load officer name from localStorage
+    // Load officer name
     const name = localStorage.getItem('officerName') || '--';
-    document.getElementById('officerNameDisplay').textContent = 'Logged in as: ' + name;
+    document.getElementById('officerInfo').textContent = 'Logged in as: ' + name;
 
+    // Logout function
     function logout() {
       localStorage.removeItem('officerName');
       window.location.href = 'index.html';
