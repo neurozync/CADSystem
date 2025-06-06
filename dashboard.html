@@ -15,16 +15,28 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
+      height: 100vh;
       overflow: hidden;
       position: relative;
+      text-align: center;
+    }
+
+    #topBar {
+      position: absolute;
+      top: 15px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 13px;
+      color: #aaa;
+      padding: 0 40px;
     }
 
     h1 {
+      margin-top: 80px;
       margin-bottom: 25px;
       color: #00bfff;
       text-shadow: 1px 1px 3px #000;
-      text-align: center;
     }
 
     .button-container {
@@ -33,7 +45,6 @@
       gap: 20px;
       width: 90%;
       max-width: 400px;
-      align-items: center;
     }
 
     button {
@@ -52,22 +63,11 @@
       background-color: #0f2a3b;
     }
 
-    #info-bar {
-      position: absolute;
-      top: 15px;
-      width: calc(100% - 40px);
-      display: flex;
-      justify-content: space-between;
-      padding: 0 20px;
-      font-size: 13px;
-      color: #888;
-    }
-
     #logoutBtn {
       position: absolute;
-      bottom: 25px;
-      right: 25px;
-      padding: 8px 14px;
+      top: 10px;
+      right: 10px;
+      padding: 6px 10px;
       background-color: #1a1a1a;
       border: 1px solid red;
       color: red;
@@ -77,38 +77,29 @@
     }
 
     @media screen and (max-width: 600px) {
+      h1 {
+        font-size: 20px;
+      }
+
       button {
         font-size: 14px;
         padding: 12px;
       }
 
-      h1 {
-        font-size: 20px;
-      }
-
-      #info-bar {
-        flex-direction: column;
-        align-items: center;
-        gap: 4px;
+      #topBar {
         font-size: 12px;
-        top: 10px;
-        left: 0;
-        right: 0;
-        padding: 0;
       }
 
       #logoutBtn {
-        bottom: 20px;
-        right: 20px;
+        padding: 5px 8px;
+        font-size: 11px;
       }
     }
   </style>
 </head>
 <body>
-  <div id="info-bar">
-    <div id="officerInfo">Logged in as: --</div>
-    <div id="clock">--:--:-- — --/--/----</div>
-  </div>
+  <div id="topBar">Logged in as: -- | --:--:-- | --/--/----</div>
+  <button id="logoutBtn" onclick="logout()">LOGOUT</button>
 
   <h1>OFFICER DASHBOARD</h1>
 
@@ -117,21 +108,17 @@
     <button onclick="location.href='SOreport.html'">File Security Report</button>
   </div>
 
-  <button id="logoutBtn" onclick="logout()">LOGOUT</button>
-
   <script>
     function updateClock() {
       const now = new Date();
       const time = now.toLocaleTimeString();
       const date = now.toLocaleDateString();
-      document.getElementById('clock').textContent = `${time} — ${date}`;
+      const name = localStorage.getItem('officerName') || '--';
+      document.getElementById('topBar').textContent = `Logged in as: ${name} | ${time} | ${date}`;
     }
 
     setInterval(updateClock, 1000);
     updateClock();
-
-    const name = localStorage.getItem('officerName') || '--';
-    document.getElementById('officerInfo').textContent = 'Logged in as: ' + name;
 
     function logout() {
       localStorage.removeItem('officerName');
