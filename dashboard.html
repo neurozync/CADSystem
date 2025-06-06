@@ -31,19 +31,6 @@
       white-space: nowrap;
     }
 
-    #logoutBtn {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      padding: 6px 10px;
-      background-color: #1a1a1a;
-      border: 1px solid red;
-      color: red;
-      cursor: pointer;
-      font-size: 12px;
-      border-radius: 4px;
-    }
-
     h1 {
       margin-top: 70px;
       margin-bottom: 25px;
@@ -88,26 +75,18 @@
       #topInfo {
         font-size: 12px;
       }
-
-      #logoutBtn {
-        font-size: 11px;
-        padding: 5px 8px;
-      }
     }
   </style>
 </head>
 <body>
 
-  <!-- Officer name, time, and date centered at top -->
+  <!-- Officer info + timestamp -->
   <div id="topInfo">Logged in as: -- | --:--:-- | --/--/----</div>
 
-  <!-- Logout button top right -->
-  <button id="logoutBtn" onclick="logout()">LOGOUT</button>
-
-  <!-- Main Title -->
+  <!-- Title -->
   <h1>OFFICER DASHBOARD</h1>
 
-  <!-- Buttons -->
+  <!-- Action buttons -->
   <div class="button-container">
     <button onclick="location.href='GPSmap.html'">Open GPS Map</button>
     <button onclick="location.href='SOreport.html'">File Security Report</button>
@@ -124,11 +103,6 @@
 
     setInterval(updateClock, 1000);
     updateClock();
-
-    function logout() {
-      localStorage.removeItem('officerName');
-      window.location.href = 'index.html';
-    }
   </script>
 </body>
 </html>
