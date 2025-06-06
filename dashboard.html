@@ -17,23 +17,35 @@
       justify-content: center;
       height: 100vh;
       overflow: hidden;
-      position: relative;
       text-align: center;
+      position: relative;
     }
 
-    #topBar {
+    #topInfo {
       position: absolute;
       top: 15px;
-      left: 0;
-      right: 0;
-      text-align: center;
+      left: 50%;
+      transform: translateX(-50%);
       font-size: 13px;
       color: #aaa;
-      padding: 0 40px;
+      white-space: nowrap;
+    }
+
+    #logoutBtn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 6px 10px;
+      background-color: #1a1a1a;
+      border: 1px solid red;
+      color: red;
+      cursor: pointer;
+      font-size: 12px;
+      border-radius: 4px;
     }
 
     h1 {
-      margin-top: 80px;
+      margin-top: 70px;
       margin-bottom: 25px;
       color: #00bfff;
       text-shadow: 1px 1px 3px #000;
@@ -63,19 +75,6 @@
       background-color: #0f2a3b;
     }
 
-    #logoutBtn {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      padding: 6px 10px;
-      background-color: #1a1a1a;
-      border: 1px solid red;
-      color: red;
-      cursor: pointer;
-      font-size: 12px;
-      border-radius: 4px;
-    }
-
     @media screen and (max-width: 600px) {
       h1 {
         font-size: 20px;
@@ -86,23 +85,29 @@
         padding: 12px;
       }
 
-      #topBar {
+      #topInfo {
         font-size: 12px;
       }
 
       #logoutBtn {
-        padding: 5px 8px;
         font-size: 11px;
+        padding: 5px 8px;
       }
     }
   </style>
 </head>
 <body>
-  <div id="topBar">Logged in as: -- | --:--:-- | --/--/----</div>
+
+  <!-- Officer name, time, and date centered at top -->
+  <div id="topInfo">Logged in as: -- | --:--:-- | --/--/----</div>
+
+  <!-- Logout button top right -->
   <button id="logoutBtn" onclick="logout()">LOGOUT</button>
 
+  <!-- Main Title -->
   <h1>OFFICER DASHBOARD</h1>
 
+  <!-- Buttons -->
   <div class="button-container">
     <button onclick="location.href='GPSmap.html'">Open GPS Map</button>
     <button onclick="location.href='SOreport.html'">File Security Report</button>
@@ -114,7 +119,7 @@
       const time = now.toLocaleTimeString();
       const date = now.toLocaleDateString();
       const name = localStorage.getItem('officerName') || '--';
-      document.getElementById('topBar').textContent = `Logged in as: ${name} | ${time} | ${date}`;
+      document.getElementById('topInfo').textContent = `Logged in as: ${name} | ${time} | ${date}`;
     }
 
     setInterval(updateClock, 1000);
