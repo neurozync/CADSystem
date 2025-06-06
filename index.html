@@ -2,115 +2,105 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-  <title>Login – CAD System</title>
+  <title>Officer Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <style>
-    html, body {
+    body {
+      background-color: #1e1e2f;
+      font-family: Arial, sans-serif;
       margin: 0;
-      padding: 0;
-      background-color: #0b0b0b;
-      font-family: 'Courier New', Courier, monospace;
-      color: #00ff00;
-      height: 100%;
       display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #ffffff;
     }
 
     .login-container {
-      background: #111;
-      border: 2px solid #00ff00;
-      padding: 30px 40px;
-      border-radius: 10px;
-      box-shadow: 0 0 12px #00ff00;
-      max-width: 350px;
+      background-color: #2c2f48;
+      padding: 30px 25px;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0, 123, 255, 0.3);
       width: 90%;
-    }
-
-    h2 {
+      max-width: 360px;
       text-align: center;
+    }
+
+    h1 {
       margin-bottom: 20px;
-      font-size: 20px;
+      color: #00bfff;
+      font-size: 22px;
     }
 
-    label {
-      font-size: 14px;
-      margin-bottom: 5px;
-      display: block;
-    }
-
-    input[type="text"],
-    input[type="password"] {
+    input {
       width: 100%;
       padding: 10px;
-      margin-bottom: 15px;
-      background: black;
-      border: 1px solid #00ff00;
-      color: #00ff00;
-      font-size: 16px; /* Prevents zoom-in */
+      margin: 8px 0;
+      font-size: 14px;
+      border: 1px solid #555;
       border-radius: 4px;
-      box-sizing: border-box;
+      background-color: #1e1e2f;
+      color: #ffffff;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #007bff;
     }
 
     button {
       width: 100%;
       padding: 10px;
-      background: black;
-      border: 1px solid #00ff00;
-      color: #00ff00;
+      margin-top: 15px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
       font-size: 16px;
-      cursor: pointer;
       border-radius: 4px;
+      cursor: pointer;
     }
 
-    .error {
-      color: red;
-      font-size: 13px;
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #errorMsg {
+      color: #ff4d4d;
       margin-top: 10px;
-      text-align: center;
-    }
-
-    @media (max-width: 480px) {
-      .login-container {
-        padding: 20px;
-      }
+      display: none;
+      font-size: 13px;
     }
   </style>
 </head>
 <body>
   <div class="login-container">
-    <h2>CAD SYSTEM LOGIN</h2>
-    <label for="username">Username</label>
-    <input type="text" id="username" autocomplete="off" />
-
-    <label for="password">Password</label>
-    <input type="password" id="password" autocomplete="off" />
-
-    <button onclick="login()">LOGIN</button>
-    <div class="error" id="errorMsg"></div>
+    <h1>OFFICER LOGIN</h1>
+    <input type="text" id="username" placeholder="Username" autocomplete="off">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+    <div id="errorMsg">Invalid credentials. Please try again.</div>
   </div>
 
   <script>
     async function login() {
       const user = document.getElementById('username').value.trim();
       const pass = document.getElementById('password').value.trim();
-      const err = document.getElementById('errorMsg');
-      err.textContent = '';
+      const errorBox = document.getElementById('errorMsg');
 
       try {
         const response = await fetch('officers.json');
         const data = await response.json();
 
-        const found = data.find(u => u.username === user && u.password === pass);
-        if (found) {
-          localStorage.setItem('officerName', found.name);
+        const match = data.find(u => u.username === user && u.password === pass);
+        if (match) {
+          localStorage.setItem('officerName', match.name);
           window.location.href = 'dashboard.html';
         } else {
-          err.textContent = 'Invalid username or password.';
+          errorBox.style.display = 'block';
         }
-      } catch (e) {
-        err.textContent = 'Error loading officer data.';
-        console.error(e);
+      } catch (err) {
+        errorBox.textContent = 'Error loading credentials.';
+        errorBox.style.display = 'block';
       }
     }
   </script>
